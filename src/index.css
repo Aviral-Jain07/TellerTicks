@@ -2,6 +2,22 @@
 
 @import "tailwindcss";
 
+@theme {
+  --color-brand-accent: #D47E30;
+  --color-brand-accent-hover: #c06b1f;
+  --color-brand-cream: #FDFBD4;
+  --color-brand-cream-card: #F5F2C2;
+  --color-ai-cyan: #06b6d4;
+  --color-ai-cyan-light: #22d3ee;
+  --color-ai-emerald: #10b981;
+  --color-ai-emerald-light: #34d399;
+  --color-ai-violet: #8b5cf6;
+  --color-ai-violet-light: #a78bfa;
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+}
+
 :root {
   --bg-main: #FDFBD4;
   --bg-card: #F5F2C2;

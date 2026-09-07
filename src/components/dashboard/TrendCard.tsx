@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { TrendItem } from '../../lib/mockData';
 import { cn, formatNumber, timeAgo } from '../../lib/utils';
 import { 
@@ -12,7 +13,7 @@ interface TrendCardProps {
 
 export function TrendCard({ trend, onReadDossier }: TrendCardProps) {
   const theme = useAppStore(state => state.theme);
-  const [bookmarked, setBookmarked] = React.useState(false);
+  const [bookmarked, setBookmarked] = useState(false);
 
   const renderMetrics = () => {
     const m = trend.platformMetrics as any;

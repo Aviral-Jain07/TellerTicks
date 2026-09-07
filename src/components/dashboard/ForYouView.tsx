@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAppStore } from '../../store/useAppStore';
 import { getTrendsForPersona, type TrendItem } from '../../lib/mockData';
 import { IntelligenceBanner } from './IntelligenceBanner';
 import { ForYouTrendCard } from './ForYouTrendCard';

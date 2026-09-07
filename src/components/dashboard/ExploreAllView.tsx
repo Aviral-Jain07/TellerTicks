@@ -6,13 +6,14 @@ import { TrendCard } from './TrendCard';
 import { InstagramReelsBoard } from './InstagramReelsBoard';
 import { YouTubeBoard } from './YouTubeBoard';
 import { FacebookBoard } from './FacebookBoard';
-import { getTrendsByPlatform, type TrendItem } from '../../lib/mockData';
+import { TrendDossierDialog } from '../dossier/TrendDossierDialog';
+import { getTrendsByPlatform, type TrendItem, type Platform } from '../../lib/mockData';
 
 export function ExploreAllView() {
   const { activePlatform, scope } = useAppStore();
   const [selectedTrend, setSelectedTrend] = useState<TrendItem | null>(null);
 
-  const trends = getTrendsByPlatform(activePlatform, scope);
+  const trends = getTrendsByPlatform(activePlatform as Platform | 'all', scope);
 
   return (
     <div className="flex flex-col gap-6">
@@ -45,7 +46,7 @@ export function ExploreAllView() {
       <TrendDossierDialog 
         trend={selectedTrend} 
         open={!!selectedTrend} 
-        onOpenChange={(open) => !open && setSelectedTrend(null)} 
+        onOpenChange={(open: boolean) => !open && setSelectedTrend(null)} 
       />
     </div>
   );

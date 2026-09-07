@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useAppStore } from '../store/useAppStore';
-import { getTrendsByPlatform, getTrendsForPersona } from '../lib/mockData';
+import { getTrendsByPlatform, getTrendsForPersona, type Platform } from '../lib/mockData';
 
 export function useFilteredTrends() {
   const scope = useAppStore((state) => state.scope);
@@ -12,7 +12,7 @@ export function useFilteredTrends() {
     if (activeView === 'foryou') {
       return getTrendsForPersona(persona, scope);
     } else {
-      return getTrendsByPlatform(activePlatform || 'all', scope);
+      return getTrendsByPlatform((activePlatform || 'all') as Platform | 'all', scope);
     }
   }, [activeView, persona, scope, activePlatform]);
 

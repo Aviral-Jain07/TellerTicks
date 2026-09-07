@@ -20,6 +20,7 @@ function AppInner() {
 
   return (
     <Routes>
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route path="/login" element={<LoginPage />} />
       <Route
         path="/dashboard"
@@ -41,7 +42,7 @@ function AppInner() {
           </ProtectedRoute>
         }
       />
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
 }

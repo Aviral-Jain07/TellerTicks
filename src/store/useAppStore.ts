@@ -40,11 +40,11 @@ interface AppState {
 }
 
 export const useAppStore = create<AppState>((set) => ({
-  isAuthenticated: false,
-  user: null,
+  isAuthenticated: true,
+  user: { name: 'Arjun Mehta', email: 'arjun.mehta@tellerticks.ai', tier: 'Pro Analyst', avatar: 'AM' },
   login: (email) => set({
     isAuthenticated: true,
-    user: { name: 'Arjun Mehta', email, tier: 'Pro Analyst', avatar: 'AM' }
+    user: { name: 'Arjun Mehta', email: email || 'arjun.mehta@tellerticks.ai', tier: 'Pro Analyst', avatar: 'AM' }
   }),
   logout: () => set({ isAuthenticated: false, user: null }),
 

@@ -2,6 +2,8 @@
 
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-brand-accent: #D47E30;
   --color-brand-accent-hover: #c06b1f;

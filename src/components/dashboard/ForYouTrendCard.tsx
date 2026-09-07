@@ -54,7 +54,7 @@ export function ForYouTrendCard({ trend, onReadDossier }: ForYouTrendCardProps) 
   return (
     <div className={cn(
       "flex flex-col gap-4 p-5 rounded-xl transition-all duration-300",
-      "bg-[#F5F2C2] dark:bg-black/60 dark:glass-card hover:glow-active border border-transparent dark:border-white/5"
+      "bg-[#F5F2C2] dark:bg-black/60 dark:glass-card hover:glow-active border border-amber-900/10 dark:border-white/5 shadow-sm"
     )}>
       {/* Top Row: Platform & Velocity */}
       <div className="flex items-center justify-between">

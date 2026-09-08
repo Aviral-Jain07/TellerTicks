@@ -23,10 +23,58 @@ export interface NetworkNode {
   connections: string[];
 }
 
+export type ThreatLevel = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
+
+export interface ThreatRisk {
+  score: number; // 1 - 100
+  level: ThreatLevel;
+  category: string;
+}
+
+export interface CIBMetrics {
+  botPercentage: number;
+  humanPercentage: number;
+  sybilClusterCount: number;
+  flag: string;
+  isCoordinated: boolean;
+}
+
+export interface IoCUrl {
+  url: string;
+  defanged: string;
+  risk: 'malicious' | 'suspicious' | 'safe';
+  type: string;
+}
+
+export interface IoCWallet {
+  address: string;
+  chain: 'Solana' | 'Ethereum' | 'Bitcoin';
+  tag: string;
+  risk: 'blacklisted' | 'flagged' | 'monitored';
+}
+
+export interface IoCPayload {
+  urls: IoCUrl[];
+  wallets: IoCWallet[];
+  hashes?: string[];
+  contractAddress?: string;
+}
+
+export interface PatientZero {
+  handle: string;
+  timestamp: string;
+  ipOrigin?: string;
+  chainOrNode?: string;
+  classification: string;
+  threatVectors: string[];
+}
+
 export interface TrendDossier {
   narrativeEssay: string;
   catalystAccount: string;
   catalystTimestamp: string;
+  patientZero?: PatientZero;
+  iocPayload?: IoCPayload;
   emotionalBreakdown: {
     excitement: number; sarcasm: number; anxiety: number; supportive: number; outrage: number;
     timeline: Array<{ hour: string; excitement: number; sarcasm: number; anxiety: number; supportive: number; outrage: number; }>;
@@ -52,6 +100,8 @@ export interface TrendItem {
   platformMetrics: PlatformMetrics;
   timestamp: string;
   dossier: TrendDossier;
+  threatRisk?: ThreatRisk;
+  cibMetrics?: CIBMetrics;
 }
 
 export interface InstagramReel {
@@ -162,7 +212,171 @@ const generateNetworkTopology = (orig: string, amps: string[]) => {
   };
 };
 
-export const TRENDS: TrendItem[] = [
+const generateThreatIntelligence = (
+  id: string,
+  title: string,
+  platform: Platform,
+  catalystAccount: string,
+  catalystTimestamp: string
+): { threatRisk: ThreatRisk; cibMetrics: CIBMetrics; patientZero: PatientZero; iocPayload: IoCPayload } => {
+  const lower = title.toLowerCase();
+
+  // High/Critical Threats: Crypto, Drainers, Exploits
+  if (lower.includes('crypto') || lower.includes('solana') || lower.includes('etf') || lower.includes('bitcoin') || lower.includes('brics')) {
+    return {
+      threatRisk: {
+        score: 95,
+        level: 'CRITICAL',
+        category: 'Phishing & Smart Contract Drainer',
+      },
+      cibMetrics: {
+        botPercentage: 86,
+        humanPercentage: 14,
+        sybilClusterCount: 34,
+        flag: '🚨 86% Bot/Automated Amplification Detected',
+        isCoordinated: true,
+      },
+      patientZero: {
+        handle: catalystAccount || '@DeFiAlphaSniper',
+        timestamp: catalystTimestamp,
+        ipOrigin: '45.154.255.88 (Moscow, RU)',
+        chainOrNode: 'Solana RPC Validator #104 / Tor',
+        classification: 'Zero-Day Sybil Syndicate',
+        threatVectors: ['Permit2 Signature Phishing', 'Malicious Phishing Landing', 'Telegram Bot Swarm'],
+      },
+      iocPayload: {
+        urls: [
+          { url: 'https://claim-airdrop-sol.xyz', defanged: 'hxxps://claim-airdrop-sol[.]xyz', risk: 'malicious', type: 'Solana Wallet Drainer' },
+          { url: 'https://revoke-permit2-vault.io', defanged: 'hxxps://revoke-permit2-vault[.]io', risk: 'malicious', type: 'Fake Authorization Portal' },
+          { url: 'https://dex-presale-contract.net', defanged: 'hxxps://dex-presale-contract[.]net', risk: 'suspicious', type: 'Honeypot Router' },
+        ],
+        wallets: [
+          { address: '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU', chain: 'Solana', tag: 'Drainer Deployer Master', risk: 'blacklisted' },
+          { address: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045', chain: 'Ethereum', tag: 'Tornado Cash Intermediary', risk: 'flagged' },
+          { address: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh', chain: 'Bitcoin', tag: 'Exfiltration Mixer', risk: 'flagged' },
+        ],
+        hashes: [
+          '0x9b71d224bd62f3785d96d46ad3ea3d73319bfbc2890caadae2dff72519673ca72',
+          '0x3c7e48b598d1a1b15c9298586f4a34b223c9e37452d3a95f9a65b71c4c1a5b88'
+        ],
+        contractAddress: '0x71C25e1a384fE64417120788647754f923295b29',
+      },
+    };
+  }
+
+  // High Threats: Leaks, State-sponsored, Defense, Geopolitical
+  if (lower.includes('gpt') || lower.includes('leak') || lower.includes('ai act') || lower.includes('taiwan') || lower.includes('sudan') || lower.includes('dpdp')) {
+    return {
+      threatRisk: {
+        score: 78,
+        level: 'HIGH',
+        category: 'State-Aligned FUD & Drive-by Dropper',
+      },
+      cibMetrics: {
+        botPercentage: 72,
+        humanPercentage: 28,
+        sybilClusterCount: 19,
+        flag: '⚠️ 72% Bot/Automated Amplification Detected',
+        isCoordinated: true,
+      },
+      patientZero: {
+        handle: catalystAccount || '@DisinfoCore',
+        timestamp: catalystTimestamp,
+        ipOrigin: '185.220.101.5 (Tor Exit Node, DE)',
+        chainOrNode: 'Disinformation Cluster #14-B',
+        classification: 'Coordinated Astroturf Catalyst',
+        threatVectors: ['Malicious PDF Payload', 'Credential Harvesting', 'Sockpuppet Swarm'],
+      },
+      iocPayload: {
+        urls: [
+          { url: 'https://gpt5-benchmark-raw-data.download', defanged: 'hxxps://gpt5-benchmark-raw-data[.]download', risk: 'malicious', type: 'Drive-by Dropper' },
+          { url: 'https://intel-briefing-leak.is', defanged: 'hxxps://intel-briefing-leak[.]is', risk: 'suspicious', type: 'Phishing Credential Harvester' },
+        ],
+        wallets: [
+          { address: '0x3f5CE5FBFe3E9af3971dD833D26bA9b5C936f0bE', chain: 'Ethereum', tag: 'Disinfo Botnet Funder', risk: 'flagged' },
+          { address: '9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM', chain: 'Solana', tag: 'Astroturf Node Fee Payer', risk: 'monitored' },
+        ],
+        hashes: [
+          '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+          '8e2b10a4597b8f9e2d3c4b5a6f7e8d9c0b1a2f3e4d5c6b7a8f9e0d1c2b3a4f5e'
+        ],
+        contractAddress: '0x1F98431c8aD98523631AE4a59f267346ea31F984',
+      },
+    };
+  }
+
+  // Medium Threats: Market Hype, Fast Spikes, Controversy
+  if (lower.includes('nvidia') || lower.includes('apple') || lower.includes('rate') || lower.includes('rbi') || lower.includes('quantum') || lower.includes('tiktok')) {
+    return {
+      threatRisk: {
+        score: 54,
+        level: 'MEDIUM',
+        category: 'Market Manipulation & Synthetic Volatility',
+      },
+      cibMetrics: {
+        botPercentage: 42,
+        humanPercentage: 58,
+        sybilClusterCount: 8,
+        flag: '⚠️ 42% Sybil Volume Detected',
+        isCoordinated: true,
+      },
+      patientZero: {
+        handle: catalystAccount || '@FinAlgoPulse',
+        timestamp: catalystTimestamp,
+        ipOrigin: '198.51.100.22 (New Jersey, US)',
+        chainOrNode: 'HFT Scraping Node / AWS us-east-1',
+        classification: 'Algorithmic Arbitrage Bot',
+        threatVectors: ['Order-book Spoofing', 'Social Sentiment Pumping'],
+      },
+      iocPayload: {
+        urls: [
+          { url: 'https://earnings-alpha-earlyaccess.live', defanged: 'hxxps://earnings-alpha-earlyaccess[.]live', risk: 'suspicious', type: 'Spoofed Analyst Portal' },
+        ],
+        wallets: [
+          { address: '0x47ac0Fb4F2D84898e4D9E7b4DaB3C24507a6D503', chain: 'Ethereum', tag: 'Flash-Loan Arbitrage Pool', risk: 'monitored' },
+        ],
+        hashes: [
+          'd41d8cd98f00b204e9800998ecf8427e02d9b23a'
+        ],
+      },
+    };
+  }
+
+  // Low Risk: Memes, Lifestyle, Organic Trends
+  return {
+    threatRisk: {
+      score: 22,
+      level: 'LOW',
+      category: 'Organic Memetic Discourse / Low Risk',
+    },
+    cibMetrics: {
+      botPercentage: 11,
+      humanPercentage: 89,
+      sybilClusterCount: 2,
+      flag: '✓ 89% Human Organic Discourse',
+      isCoordinated: false,
+    },
+    patientZero: {
+      handle: catalystAccount || '@trend_origin',
+      timestamp: catalystTimestamp,
+      ipOrigin: '104.28.19.45 (Cloudflare Edge, US)',
+      chainOrNode: 'Consumer Edge Gateway',
+      classification: 'Organic Content Creator',
+      threatVectors: ['Memetic Trend Propagation'],
+    },
+    iocPayload: {
+      urls: [
+        { url: 'https://fan-hub-creators.xyz', defanged: 'hxxps://fan-hub-creators[.]xyz', risk: 'safe', type: 'Community Landing' },
+      ],
+      wallets: [
+        { address: '0x1aD91ee08f21bE3dE0BA2Ba6918E714dA6B45836', chain: 'Ethereum', tag: 'Verified Creator Tip Jar', risk: 'monitored' },
+      ],
+      hashes: [],
+    },
+  };
+};
+
+const RAW_TRENDS: TrendItem[] = [
   {
     id: 't1',
     title: 'EU AI Act Enforcement Begins',
@@ -665,6 +879,26 @@ Incumbent aerospace contractors are facing intense scrutiny from investors as th
     }
   }
 ];
+
+export const TRENDS: TrendItem[] = RAW_TRENDS.map(trend => {
+  const threatData = generateThreatIntelligence(
+    trend.id,
+    trend.title,
+    trend.platform,
+    trend.dossier.catalystAccount,
+    trend.dossier.catalystTimestamp
+  );
+  return {
+    ...trend,
+    threatRisk: threatData.threatRisk,
+    cibMetrics: threatData.cibMetrics,
+    dossier: {
+      ...trend.dossier,
+      patientZero: threatData.patientZero,
+      iocPayload: threatData.iocPayload,
+    }
+  };
+});
 
 // 3. MEDIA BOARDS
 export const INSTAGRAM_REELS: InstagramReel[] = [
